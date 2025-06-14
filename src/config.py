@@ -32,8 +32,8 @@ class Settings(BaseSettings):
 
 
 class AuthJWT(BaseSettings):
-    private_key_path: Path = PATH_TO_SRC / "certs" / "private-key.pem"
-    public_key_path: Path = PATH_TO_SRC / "certs" / "public-key.pem"
+    private_key_path: Path = PATH_TO_SRC / "certs" / "jwt-private.pem"
+    public_key_path: Path = PATH_TO_SRC / "certs" / "jwt-public.pem"
     ALGORITHM: str = "RS256"
 
 

@@ -26,7 +26,7 @@ async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     session: AsyncSession = Depends(session_dep),
 ) -> Token:
-    user = auth_user(form_data.email, form_data.password, session)
+    user = await auth_user(form_data.username, form_data.password, session)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

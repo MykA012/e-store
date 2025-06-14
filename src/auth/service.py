@@ -16,7 +16,7 @@ from src.database.models.user import User
 from src.database.repositories import user_repo
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 
 async def auth_user(
@@ -39,7 +39,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
         payload=to_encode,
-        key=load_auth_jwt().private_key_path,
+        key=load_auth_jwt().private_key_path.read_text(),
         algorithm=load_auth_jwt().ALGORITHM,
     )
     return encoded_jwt
@@ -57,7 +57,7 @@ async def get_current_user(
     try:
         payload = jwt.decode(
             token,
-            load_auth_jwt().public_key_path,
+            load_auth_jwt().public_key_path.read_text(),
             algorithms=[load_auth_jwt().ALGORITHM],
         )
         email = payload.get("sub")
@@ -72,5 +72,5 @@ async def get_current_user(
     return user
 
 
-async def get_current_active_user(cuurent_user: User = Depends(get_current_user)):
-    return get_current_user
+async def get_current_active_user(current_user: User = Depends(get_current_user)):
+    return current_user

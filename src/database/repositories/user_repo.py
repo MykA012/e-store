@@ -21,7 +21,7 @@ async def create(session: AsyncSession, user_in: UserCreate) -> User:
 
 
 async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
-    stmt = select(User).where(User.email)
+    stmt = select(User).where(User.email == email)
     result = await session.execute(stmt)
     return result.scalar_one_or_none()
 
