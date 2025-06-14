@@ -3,7 +3,6 @@
 ```shell
 python -m src.main
 ```
-===
 
 ##Запуск без __pycache__
 ```shell
