@@ -14,7 +14,7 @@ session_factory = async_sessionmaker(bind=engine)
 @asynccontextmanager
 async def init_db(app: FastAPI):
     from src.database.models.base import Base
-    from src.database.models import user
+    from src.user import models
     
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)

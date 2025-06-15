@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import Sequence, select
 
-from src.auth.utils import get_password_hash
-from src.database.models.user import User
-from src.schemas.user import UserCreate
+from src.auth.security import get_password_hash
+from src.user.models import User
+from src.user.schemas import UserCreate
 
 
 async def create(session: AsyncSession, user_in: UserCreate) -> User:
