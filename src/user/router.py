@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from src.auth.service import get_current_active_user
-from src.dependencies import session_dep
+from src.global_deps import session_dep
 from src.user.schemas import UserIDB
 from src.user.models import User
 from src.user import crud

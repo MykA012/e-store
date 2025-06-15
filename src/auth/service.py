@@ -8,7 +8,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.auth.security import verify_password
-from src.dependencies import session_dep
+from src.global_deps import session_dep
 from src.auth.models import TokenData
 from src.config import load_auth_jwt
 
