@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.user import crud
+from src.user import user_repo
 from src.global_deps import session_dep
 from src.user.schemas import UserCreate, UserIDB
 from src.auth.models import Token
@@ -16,7 +16,7 @@ router = APIRouter()
 
 @router.post("/signup", tags=["Auth"], summary="Создает нового пользователя в бд")
 async def registration(user_in: UserCreate, session=Depends(session_dep)) -> UserIDB:
-    user = await crud.create(session=session, user_in=user_in)
+    user = await user_repo.create(session=session, user_in=user_in)
     return user
 
 

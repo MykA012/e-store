@@ -13,7 +13,7 @@ from src.auth.models import TokenData
 from src.config import load_auth_jwt
 
 from src.user.models import User
-from src.user import crud
+from src.user import user_repo
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
@@ -22,7 +22,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 async def auth_user(
     email: str, password: str, session: AsyncSession = Depends(session_dep)
 ):
-    user = await crud.get_user_by_email(session, email)
+    user = await user_repo.get_user_by_email(session, email)
     if not user:
         return False
     if not verify_password(password, user.password):
@@ -66,7 +66,7 @@ async def get_current_user(
         token_data = TokenData(email=email)
     except InvalidTokenError:
         raise credentials_exception
-    user = await crud.get_user_by_email(session, email=token_data.email)
+    user = await user_repo.get_user_by_email(session, email=token_data.email)
     if user is None:
         raise credentials_exception
     return user
