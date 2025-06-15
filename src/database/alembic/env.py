@@ -22,7 +22,10 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 from src.config import load_settings
 from src.database.models.base import Base
+
 from src.user import models
+from src.category import models
+from src.product import models
 
 target_metadata = Base.metadata
 

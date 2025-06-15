@@ -1,0 +1,22 @@
+from typing import Annotated
+
+from fastapi import Depends, HTTPException, Path, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+
+from src.global_deps import session_dep
+from src.category.models import Category
+from src.category import category_repo
+
+
+async def get_category_by_id(
+    category_id: Annotated[int, Path],
+    session: AsyncSession = Depends(session_dep)
+) -> Category:
+    category = await category_repo.get_category_by_id(
+        session=session,
+        category_id=category_id,
+    )
+    if category is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    return category

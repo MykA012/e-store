@@ -15,4 +15,4 @@ class Category(Base):
     name: Mapped[str] = mapped_column(unique=True)
     slug: Mapped[str] = mapped_column(unique=True, index=True)
 
-    products: list["Product"] = relationship(back_populates="category")
+    products: Mapped[list["Product"]] = relationship(back_populates="category")

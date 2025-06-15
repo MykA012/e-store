@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class Product(Base):
     name: Mapped[str] = mapped_column(unique=True)
     slug: Mapped[str] = mapped_column(unique=True, index=True)
-    price: Mapped[Decimal] = mapped_column(default=0, server_default=0)
+    price: Mapped[Decimal]
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))    
-    category: "Category" = relationship(back_populates="products")
+    category: Mapped["Category"] = relationship(back_populates="products")
