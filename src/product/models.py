@@ -16,4 +16,4 @@ class Product(Base):
     price: Mapped[Decimal] = mapped_column(default=0, server_default=0)
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))    
-    category: Mapped["Category"] = relationship(back_populates="products")
+    category: "Category" = relationship(back_populates="products")
