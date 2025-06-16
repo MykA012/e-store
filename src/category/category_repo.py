@@ -15,7 +15,10 @@ async def all_categories(session: AsyncSession) -> list[Category]:
     return list(result.scalars().all())
 
 
-async def add_category(session: AsyncSession, category_in: CategoryCreate) -> Category:
+async def add_category(
+    session: AsyncSession,
+    category_in: CategoryCreate,
+) -> Category:
     new_category = Category(**category_in.model_dump())
     session.add(new_category)
     await session.commit()
@@ -28,7 +31,6 @@ async def get_category_by_id(
     session: AsyncSession, category_id: int
 ) -> Category | None:
     return await session.get(Category, category_id)
-    
 
 
 async def update_category(

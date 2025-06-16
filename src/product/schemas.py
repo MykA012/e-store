@@ -1,9 +1,11 @@
 from decimal import Decimal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class ProductBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     name: str
     slug: str
     price: Decimal

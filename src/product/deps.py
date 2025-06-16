@@ -4,18 +4,18 @@ from fastapi import Depends, HTTPException, Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.global_deps import session_dep
-from src.category.models import Category
-from src.category import category_repo
+from src.product.models import Product
+from src.product import product_repo
 
 
-async def get_category_by_id(
-    category_id: Annotated[int, Path],
+async def get_product_by_id(
+    product_id: Annotated[int, Path],
     session: AsyncSession = Depends(session_dep)
-) -> Category:
-    category = await category_repo.get_category_by_id(
+) -> Product:
+    product = await product_repo.get_product_by_id(
         session=session,
-        category_id=category_id,
+        product_id=product_id,
     )
-    if category is None:
+    if product is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    return category
+    return product
