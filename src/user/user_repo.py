@@ -3,7 +3,11 @@ from sqlalchemy import select
 
 from src.auth.security import get_password_hash
 from src.user.models import User
-from src.user.schemas import UserCreate
+from src.user.schemas import (
+    UserCreate,
+    UserEdit,
+    UserChangePassword,
+)
 
 
 async def all_users(session: AsyncSession) -> list[User]:
@@ -35,3 +39,29 @@ async def get_user_by_email(
     stmt = select(User).where(User.email == email)
     result = await session.execute(stmt)
     return result.scalar_one_or_none()
+
+
+async def edit_user(
+    session: AsyncSession,
+    user: User,
+    edit_user: UserEdit,
+) -> User:
+    for name, value in edit_user.model_dump(exclude_unset=True).items():
+        setattr(user, name, value)
+
+    await session.commit()
+    await session.refresh(user)
+    return user
+
+
+async def change_user_password(
+    session: AsyncSession,
+    user: User,
+    edit_pass: UserChangePassword,
+) -> User:
+    for name, value in edit_pass.model_dump(exclude_unset=True).items():
+        setattr(user, name, get_password_hash(value))
+
+    await session.commit()
+    await session.refresh(user)
+    return user

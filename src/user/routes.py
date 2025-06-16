@@ -1,13 +1,43 @@
 from fastapi import APIRouter, Depends
 
+from src.auth.service import get_current_active_user
 from src.global_deps import session_dep
-from src.user.schemas import UserIDB
 from src.user import user_repo
+from src.user.schemas import (
+    UserEdit,
+    UserChangePassword,
+    UserIDB,
+)
 
-router = APIRouter(tags=["users"])
+router = APIRouter(prefix="/me", tags=["Users"])
 
 
-@router.get("/users")
-async def alL_users(session=Depends(session_dep)) -> list[UserIDB]:
-    users = await user_repo.all_users(session=session)
-    return users
+@router.get("/")
+async def me(user=Depends(get_current_active_user)) -> UserIDB:
+    return user
+
+
+@router.patch("/edit")
+async def edit(
+    edit_user: UserEdit,
+    user=Depends(get_current_active_user),
+    session=Depends(session_dep),
+) -> UserIDB:
+    return await user_repo.edit_user(
+        session=session,
+        user=user,
+        edit_user=edit_user,
+    )
+
+
+@router.patch("/change-password")
+async def change_password(
+    edit_pass: UserChangePassword,
+    user=Depends(get_current_active_user),
+    session=Depends(session_dep),
+) -> UserIDB:
+    return await user_repo.change_user_password(
+        session=session,
+        user=user,
+        edit_pass=edit_pass
+    )
