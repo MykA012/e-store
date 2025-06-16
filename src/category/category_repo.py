@@ -47,6 +47,9 @@ async def update_category(
     return category
 
 
-async def delete_category(session: AsyncSession, category: Category) -> None:
+async def delete_category(
+    session: AsyncSession,
+    category: Category,
+) -> None:
     await session.delete(category)
     await session.commit()

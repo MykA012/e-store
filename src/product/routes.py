@@ -69,7 +69,4 @@ async def delete_product(
     product=Depends(get_product_by_id),
     session=Depends(session_dep),
 ) -> None:
-    await product_repo.delete_product(
-        session=session,
-        product=product
-    )
+    await product_repo.delete_product(session=session, product=product)

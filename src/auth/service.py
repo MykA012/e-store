@@ -66,11 +66,17 @@ async def get_current_user(
         token_data = TokenData(email=email)
     except InvalidTokenError:
         raise credentials_exception
-    user = await user_repo.get_user_by_email(session, email=token_data.email)
+
+    user = await user_repo.get_user_by_email(
+        session,
+        email=token_data.email,
+    )
     if user is None:
         raise credentials_exception
     return user
 
 
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
+async def get_current_active_user(
+    current_user: User = Depends(get_current_user),
+):
     return current_user

@@ -10,7 +10,7 @@ from src.product import product_repo
 
 async def get_product_by_id(
     product_id: Annotated[int, Path],
-    session: AsyncSession = Depends(session_dep)
+    session: AsyncSession = Depends(session_dep),
 ) -> Product:
     product = await product_repo.get_product_by_id(
         session=session,

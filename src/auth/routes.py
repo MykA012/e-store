@@ -15,8 +15,14 @@ router = APIRouter(tags=["Auth"])
 
 
 @router.post("/signup", status_code=status.HTTP_201_CREATED)
-async def registration(user_in: UserCreate, session=Depends(session_dep)) -> UserIDB:
-    user = await user_repo.add_user(session=session, user_in=user_in)
+async def registration(
+    user_in: UserCreate,
+    session=Depends(session_dep),
+) -> UserIDB:
+    user = await user_repo.add_user(
+        session=session,
+        user_in=user_in,
+    )
     return user
 
 
@@ -37,9 +43,3 @@ async def login(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
     return Token(access_token=access_token, token_type="bearer")
-
-
-@router.get("/users", tags=["Debug"])
-async def alL_users(session=Depends(session_dep)) -> list[UserIDB]:
-    users = await user_repo.all_users(session=session)
-    return users

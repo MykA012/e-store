@@ -8,7 +8,11 @@ from src.config import load_settings
 
 engine = create_async_engine(url=load_settings().db_url)
 
-session_factory = async_sessionmaker(bind=engine, expire_on_commit=False, autoflush=False)
+session_factory = async_sessionmaker(
+    bind=engine,
+    expire_on_commit=False,
+    autoflush=False,
+)
 
 
 @asynccontextmanager
@@ -17,9 +21,9 @@ async def init_db(app: FastAPI):
     from src.user import models
     from src.product import models
     from src.category import models
-    
+
     async with engine.begin() as conn:
         # await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
-    
+
     yield

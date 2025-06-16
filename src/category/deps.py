@@ -9,8 +9,7 @@ from src.category import category_repo
 
 
 async def get_category_by_id(
-    category_id: Annotated[int, Path],
-    session: AsyncSession = Depends(session_dep)
+    category_id: Annotated[int, Path], session: AsyncSession = Depends(session_dep)
 ) -> Category:
     category = await category_repo.get_category_by_id(
         session=session,
