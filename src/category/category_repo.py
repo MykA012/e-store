@@ -27,7 +27,8 @@ async def add_category(session: AsyncSession, category_in: CategoryCreate) -> Ca
 async def get_category_by_id(
     session: AsyncSession, category_id: int
 ) -> Category | None:
-    await session.get(Category, category_id)
+    return await session.get(Category, category_id)
+    
 
 
 async def update_category(
@@ -40,6 +41,7 @@ async def update_category(
         setattr(category, name, value)
 
     await session.commit()
+    await session.refresh(category)
     return category
 
 

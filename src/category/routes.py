@@ -38,7 +38,7 @@ async def get_category(category=Depends(get_category_by_id)) -> CategoryIDB:
 
 @router.patch("/{category_id}")
 async def patch_category(
-    category_update=CategoryPatch,
+    category_update: CategoryPatch,
     category=Depends(get_category_by_id),
     session=Depends(session_dep),
 ) -> CategoryIDB:
@@ -52,7 +52,7 @@ async def patch_category(
 
 @router.put("/{category_id}")
 async def put_category(
-    category_update=CategoryPatch,
+    category_update: CategoryPut,
     category=Depends(get_category_by_id),
     session=Depends(session_dep),
 ) -> CategoryIDB:
