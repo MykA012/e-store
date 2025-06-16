@@ -16,7 +16,7 @@ async def all_users(session: AsyncSession) -> Sequence[User]:
 async def create(session: AsyncSession, user_in: UserCreate) -> User:
     user = User(
         email=user_in.email,
-        password=get_password_hash(user_in.password),
+        hashed_password=get_password_hash(user_in.hashed_password),
     )
     session.add(user)
     await session.commit()

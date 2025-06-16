@@ -25,7 +25,7 @@ async def auth_user(
     user = await user_repo.get_user_by_email(session, email)
     if not user:
         return False
-    if not verify_password(password, user.password):
+    if not verify_password(password, user.hashed_password):
         return False
     return user
 

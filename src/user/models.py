@@ -6,4 +6,4 @@ from src.database.models.base import Base
 class User(Base):
     email: Mapped[str] = mapped_column(unique=True)
 
-    password: Mapped[str]
+    hashed_password: Mapped[str]
