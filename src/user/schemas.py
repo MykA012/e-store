@@ -2,12 +2,12 @@ from pydantic import BaseModel, EmailStr
 
 
 class UserBase(BaseModel):
+    username: str
     email: EmailStr
-    hashed_password: str
 
 
 class UserCreate(UserBase):
-    pass
+    hashed_password: str
 
 
 class UserIDB(UserBase):

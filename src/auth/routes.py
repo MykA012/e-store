@@ -9,18 +9,18 @@ from src.user import user_repo
 from src.global_deps import session_dep
 from src.user.schemas import UserCreate, UserIDB
 from src.auth.models import Token
-from src.auth.service import auth_user, create_access_token
+from src.auth.service import auth_user, create_access_token, get_current_active_user
 
-router = APIRouter()
+router = APIRouter(tags=["Auth"])
 
 
-@router.post("/signup", tags=["Auth"], summary="Создает нового пользователя в бд")
+@router.post("/signup")
 async def registration(user_in: UserCreate, session=Depends(session_dep)) -> UserIDB:
-    user = await user_repo.create(session=session, user_in=user_in)
+    user = await user_repo.add_user(session=session, user_in=user_in)
     return user
 
 
-@router.post("/login", tags=["Auth"])
+@router.post("/login")
 async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     session: AsyncSession = Depends(session_dep),
@@ -37,3 +37,8 @@ async def login(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
     return Token(access_token=access_token, token_type="bearer")
+
+
+@router.get("/me")
+async def me(current_user=Depends(get_current_active_user)) -> UserIDB:
+    return current_user
