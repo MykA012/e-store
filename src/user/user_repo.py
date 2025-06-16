@@ -65,3 +65,11 @@ async def change_user_password(
     await session.commit()
     await session.refresh(user)
     return user
+
+
+async def delete_user(
+    session: AsyncSession,
+    user: User,
+) -> None:
+    session.delete(user)
+    await session.commit()

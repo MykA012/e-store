@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from src.auth.service import get_current_active_user
 from src.global_deps import session_dep
@@ -37,7 +37,13 @@ async def change_password(
     session=Depends(session_dep),
 ) -> UserIDB:
     return await user_repo.change_user_password(
-        session=session,
-        user=user,
-        edit_pass=edit_pass
+        session=session, user=user, edit_pass=edit_pass
     )
+
+
+@router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_current_user(
+    usere=Depends(get_current_active_user),
+    session=Depends(session_dep),
+):
+    await user_repo.delete_user
