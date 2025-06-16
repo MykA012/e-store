@@ -71,5 +71,5 @@ async def delete_user(
     session: AsyncSession,
     user: User,
 ) -> None:
-    session.delete(user)
+    await session.delete(user)
     await session.commit()

@@ -43,7 +43,10 @@ async def change_password(
 
 @router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_current_user(
-    usere=Depends(get_current_active_user),
+    user=Depends(get_current_active_user),
     session=Depends(session_dep),
 ):
-    await user_repo.delete_user
+    await user_repo.delete_user(
+        session=session,
+        user=user,
+    )
