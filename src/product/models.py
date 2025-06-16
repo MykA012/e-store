@@ -2,7 +2,8 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, event
+from unidecode import unidecode
 
 from src.database.models.base import Base
 
@@ -17,3 +18,15 @@ class Product(Base):
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))    
     category: Mapped["Category"] = relationship(back_populates="products")
+
+    @staticmethod
+    def generate_slug(name: str) -> str:
+        slug = unidecode(name).strip().lower()
+        slug = slug.replace(" ", "-")
+        return slug
+
+
+@event.listens_for(Product, "before_insert")
+@event.listens_for(Product, "before_update")
+def generate_product_slug(mapper, conn, target):
+    target.slug = Product.generate_slug(target.name)

@@ -5,7 +5,6 @@ class CategoryBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     name: str
-    slug: str
 
 
 class CategoryCreate(CategoryBase):
@@ -14,7 +13,6 @@ class CategoryCreate(CategoryBase):
 
 class CategoryPatch(BaseModel):
     name: str | None = None
-    slug: str | None = None
 
 
 class CategoryPut(CategoryBase):
@@ -23,3 +21,4 @@ class CategoryPut(CategoryBase):
 
 class CategoryIDB(CategoryBase):
     id: int
+    slug: str

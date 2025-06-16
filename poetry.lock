@@ -814,6 +814,18 @@ files = [
 typing-extensions = ">=4.12.0"
 
 [[package]]
+name = "unidecode"
+version = "1.4.0"
+description = "ASCII transliterations of Unicode text"
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "Unidecode-1.4.0-py3-none-any.whl", hash = "sha256:c3c7606c27503ad8d501270406e345ddb480a7b5f38827eafe4fa82a137f0021"},
+    {file = "Unidecode-1.4.0.tar.gz", hash = "sha256:ce35985008338b676573023acc382d62c264f307c8f7963733405add37ea2b23"},
+]
+
+[[package]]
 name = "uvicorn"
 version = "0.34.3"
 description = "The lightning-fast ASGI server."
@@ -835,4 +847,4 @@ standard = ["colorama (>=0.4) ; sys_platform == \"win32\"", "httptools (>=0.6.3)
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "964e5f6fc18f9abab1ed6c51e38138b43f67098633d5f0ce0aa7f6577a8dad95"
+content-hash = "85bab2b4dae4e6fd60c38a87d71d590c28e69df8ea45c34d48e62bd539c81ea4"
