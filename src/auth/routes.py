@@ -19,7 +19,7 @@ async def registration(
     user_in: UserCreate,
     session=Depends(session_dep),
 ) -> UserIDB:
-    user = await user_repo.add_user(
+    user = await user_repo.create_user(
         session=session,
         user_in=user_in,
     )

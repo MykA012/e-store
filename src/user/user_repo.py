@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from src.auth.security import get_password_hash
+from src.cart.cart_repo import create_cart
 from src.user.models import User
 from src.user.schemas import (
     UserCreate,
@@ -10,13 +11,7 @@ from src.user.schemas import (
 )
 
 
-async def all_users(session: AsyncSession) -> list[User]:
-    stmt = select(User)
-    result = await session.execute(stmt)
-    return list(result.scalars().all())
-
-
-async def add_user(
+async def create_user(
     session: AsyncSession,
     user_in: UserCreate,
 ) -> User:
@@ -28,6 +23,10 @@ async def add_user(
     session.add(user)
     await session.commit()
     await session.refresh(user)
+    await create_cart(
+        session=session,
+        user=user,
+    )
 
     return user
 
@@ -59,8 +58,9 @@ async def change_user_password(
     user: User,
     edit_pass: UserChangePassword,
 ) -> User:
-    for name, value in edit_pass.model_dump(exclude_unset=True).items():
-        setattr(user, name, get_password_hash(value))
+    user.hashed_password = get_password_hash(
+        edit_pass.hashed_password,
+    )
 
     await session.commit()
     await session.refresh(user)

@@ -1,8 +1,8 @@
-"""cart test
+"""carts table
 
-Revision ID: 40dab363dc49
+Revision ID: 7a641c4c151f
 Revises: 60273f506ccb
-Create Date: 2025-06-17 11:33:32.839371
+Create Date: 2025-06-17 12:00:01.937306
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '40dab363dc49'
+revision: str = '7a641c4c151f'
 down_revision: Union[str, None] = '60273f506ccb'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
