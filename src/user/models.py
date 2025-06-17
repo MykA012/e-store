@@ -12,6 +12,7 @@ class User(Base):
     username: Mapped[str] = mapped_column(unique=True)
     email: Mapped[str] = mapped_column(unique=True)
     hashed_password: Mapped[str]
+    is_admin: Mapped[bool] = mapped_column(default=False)
 
     cart: Mapped["Cart"] = relationship(
         back_populates="user",
