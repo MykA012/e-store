@@ -34,6 +34,15 @@ async def get_product_by_id(
     return await session.get(Product, product_id)
 
 
+async def get_product_by_slug(
+    session: AsyncSession,
+    product_slug: str,
+) -> Product | None:
+    stmt = select(Product).where(Product.slug == product_slug)
+    result = await session.execute(stmt)
+    return result.scalar_one_or_none()
+
+
 async def update_product(
     session: AsyncSession,
     product: Product,

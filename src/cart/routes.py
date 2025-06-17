@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from src.auth.service import get_current_active_user
+from src.cart import cart_repo
 from src.global_deps import session_dep
 from src.user.models import User
 
@@ -21,4 +22,9 @@ async def add_product_in_cart(
     user: User = Depends(get_current_active_user),
     session=Depends(session_dep),
 ):
-    ...
+    await cart_repo.add_product_to_cart(
+        session=session,
+        user=user,
+        product_slug=slug,
+    )
+    return {"status": "ok"}
