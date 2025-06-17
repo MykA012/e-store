@@ -30,4 +30,5 @@ class Item(Base):
     cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id"))
     cart: Mapped["Cart"] = relationship(back_populates="items")
 
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"))
     product: Mapped["Product"] = relationship(back_populates="item")

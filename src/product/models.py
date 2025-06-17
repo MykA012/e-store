@@ -17,8 +17,7 @@ class Product(Base):
     slug: Mapped[str] = mapped_column(unique=True, index=True)
     price: Mapped[Decimal]
 
-    item_id: Mapped[int] = mapped_column(ForeignKey("items.id"))
-    item: Mapped["Item"] = relationship("product")
+    item: Mapped["Item"] = relationship(back_populates="product")
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
     category: Mapped["Category"] = relationship(back_populates="products")
