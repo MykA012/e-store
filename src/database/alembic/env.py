@@ -26,6 +26,7 @@ from src.database.models.base import Base
 from src.user import models
 from src.category import models
 from src.product import models
+from src.cart import models
 
 target_metadata = Base.metadata
 
