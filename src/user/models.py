@@ -13,8 +13,6 @@ class User(Base):
     email: Mapped[str] = mapped_column(unique=True)
     hashed_password: Mapped[str]
 
-    is_active: Mapped[bool] = mapped_column(default=True)
-
     cart: Mapped["Cart"] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
