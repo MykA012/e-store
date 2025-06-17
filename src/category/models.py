@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 
 class Category(Base):
     __tablename__ = "categories"
-
     name: Mapped[str] = mapped_column(unique=True)
     slug: Mapped[str] = mapped_column(unique=True, index=True)
 

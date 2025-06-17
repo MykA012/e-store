@@ -8,6 +8,7 @@ from unidecode import unidecode
 from src.database.models.base import Base
 
 if TYPE_CHECKING:
+    from src.cart.models import Item
     from src.category.models import Category
 
 
@@ -15,6 +16,9 @@ class Product(Base):
     name: Mapped[str] = mapped_column(unique=True)
     slug: Mapped[str] = mapped_column(unique=True, index=True)
     price: Mapped[Decimal]
+
+    item_id: Mapped[int] = mapped_column(ForeignKey("items.id"))
+    item: Mapped["Item"] = relationship("product")
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
     category: Mapped["Category"] = relationship(back_populates="products")
