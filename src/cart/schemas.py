@@ -2,36 +2,16 @@ from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict
 
+from src.product.schemas import ProductIDB
 
-# Cart
-class CartBase(BaseModel):
+
+class Item(BaseModel):
+    quantity: int
+    product: ProductIDB
+
+
+class CartIDB(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     items_count: int
     total_price: Decimal
-
-    user_id: int
-
-
-class ItemCreate(CartBase):
-    pass
-
-
-class CartIDB(CartBase):
-    id: int
-
-
-# Item
-class ItemBase(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    quantity: int
-
-    cart_id: int
-    product_id: int
-
-
-class ItemCreate(ItemBase):
-    pass
-
-
-class ItemIDB(ItemBase):
-    id: int
+    items: list[Item]

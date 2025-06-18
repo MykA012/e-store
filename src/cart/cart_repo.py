@@ -8,11 +8,25 @@ from src.user.models import User
 from src.cart.models import Cart, Item
 
 
-async def create_cart(session: AsyncSession, user: User) -> Cart:
+async def create_user_cart(session: AsyncSession, user: User) -> Cart:
     cart = Cart(user_id=user.id)
     session.add(cart)
     await session.commit()
     await session.refresh(cart)
+    return cart
+
+
+async def get_user_cart(
+    session: AsyncSession,
+    user: User,
+) -> Cart:
+    stmt = (
+        select(Cart)
+        .where(Cart.user_id == user.id)
+        .options(selectinload(Cart.items).joinedload(Item.product))
+    )
+    result = await session.execute(stmt)
+    cart = result.scalar_one()
     return cart
 
 
@@ -29,11 +43,10 @@ async def add_product_to_cart(
     if product is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    stmt = (select(Cart)
+    stmt = (
+        select(Cart)
         .where(Cart.user_id == user.id)
-        .options(
-            selectinload(Cart.items)
-            .selectinload(Item.product))
+        .options(selectinload(Cart.items).selectinload(Item.product))
     )
     result = await session.execute(stmt)
     cart = result.scalar_one_or_none()
@@ -54,9 +67,7 @@ async def add_product_to_cart(
         await session.flush()
 
     cart.items_count = sum(item.quantity for item in cart.items)
-    cart.total_price = sum(
-        item.quantity * item.product.price for item in cart.items
-    )
+    cart.total_price = sum(item.quantity * item.product.price for item in cart.items)
     await session.commit()
     await session.refresh(cart)
     return cart

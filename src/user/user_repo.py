@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from src.auth.security import get_password_hash
-from src.cart.cart_repo import create_cart
+from src.cart.cart_repo import create_user_cart
 from src.user.models import User
 from src.user.schemas import (
     UserCreate,
@@ -23,7 +23,7 @@ async def create_user(
     session.add(user)
     await session.commit()
     await session.refresh(user)
-    await create_cart(
+    await create_user_cart(
         session=session,
         user=user,
     )
