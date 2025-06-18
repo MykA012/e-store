@@ -1,9 +1,12 @@
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import (
+    APIRouter, Depends,
+    HTTPException, status,
+)
 
 from src.auth.service import auth_user, create_access_token
 from src.user.schemas import UserCreate, UserIDB

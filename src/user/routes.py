@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 
-from src.auth.service import get_current_active_user
+from src.auth.deps import get_current_active_user
 from src.global_deps import session_dep
 from src.user import user_repo
 from src.user.schemas import (
