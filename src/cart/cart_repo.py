@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select
@@ -20,14 +21,19 @@ async def add_product_to_cart(
     user: User,
     product_slug: str,
     quantity: int = 1,
-):
+) -> Cart:
     product = await product_repo.get_product_by_slug(
         session=session,
         product_slug=product_slug,
     )
+    if product is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
     stmt = (select(Cart)
         .where(Cart.user_id == user.id)
-        .options(selectinload(Cart.items))
+        .options(
+            selectinload(Cart.items)
+            .selectinload(Item.product))
     )
     result = await session.execute(stmt)
     cart = result.scalar_one_or_none()
@@ -45,10 +51,12 @@ async def add_product_to_cart(
         )
         session.add(new_item)
         cart.items.append(new_item)
+        await session.flush()
 
     cart.items_count = sum(item.quantity for item in cart.items)
-    # cart.total_price = sum(
-    #     item.quantity * item.product.price for item in cart.items
-    # )
+    cart.total_price = sum(
+        item.quantity * item.product.price for item in cart.items
+    )
     await session.commit()
+    await session.refresh(cart)
     return cart
