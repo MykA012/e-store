@@ -27,6 +27,10 @@ async def get_user_cart(
     )
     result = await session.execute(stmt)
     cart = result.scalar_one()
+    cart.items_count = sum(item.quantity for item in cart.items)
+    cart.total_price = sum(item.quantity * item.product.price for item in cart.items)
+    await session.commit()
+    await session.refresh(cart)
     return cart
 
 
