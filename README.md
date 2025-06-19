@@ -56,8 +56,8 @@ python -m src.main
 * **DELETE** private - `/products/{product_id}` - Удалить товар
 
 ### Categories
-* **GET** private - `/categories/` - Все товары
-* **POST** private - `/categories/` - Добавить товар
+* **GET** private - `/categories/` - Все категории
+* **POST** private - `/categories/` - Добавить категорию
 * **GET** private - `/categories/{categories_id}` - Найти категорию по id
 * **PATCH** private - `/categories/{categories_id}` - Частично редактировать категорию
 * **PATCH** private - `/categories/{categories_id}` - Перезаписать категорию
