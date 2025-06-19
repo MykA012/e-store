@@ -22,6 +22,18 @@ async def my_cart(
     return cart
 
 
+@router.delete("/cart")
+async def clear_cart(
+    session=Depends(session_dep),
+    user: User = Depends(get_current_active_user),
+) -> CartIDB:
+    cart = await cart_repo.clear_user_cart(
+        session=session,
+        user=user,
+    )
+    return cart
+
+
 @router.post("/{slug}")
 async def add_product_in_cart(
     slug: str,

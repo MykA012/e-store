@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class Cart(Base):
     items_count: Mapped[int] = mapped_column(default=0)
-    total_price: Mapped[Decimal] = mapped_column(default=0)
+    total_price: Mapped[Decimal] = mapped_column(default=Decimal("0"))
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped["User"] = relationship(back_populates="cart")

@@ -1,7 +1,9 @@
+from decimal import Decimal
+
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from sqlalchemy import select
+from sqlalchemy import select, delete
 
 from src.product import product_repo
 from src.user.models import User
@@ -23,12 +25,34 @@ async def get_user_cart(
     stmt = (
         select(Cart)
         .where(Cart.user_id == user.id)
-        .options(selectinload(Cart.items).joinedload(Item.product))
+        .options(selectinload(Cart.items).selectinload(Item.product))
     )
     result = await session.execute(stmt)
     cart = result.scalar_one()
     cart.items_count = sum(item.quantity for item in cart.items)
     cart.total_price = sum(item.quantity * item.product.price for item in cart.items)
+    await session.commit()
+    await session.refresh(cart)
+    return cart
+
+
+async def clear_user_cart(
+    session: AsyncSession,
+    user: User,
+) -> Cart:
+    stmt = (
+        select(Cart)
+        .where(Cart.user_id == user.id)
+        .options(selectinload(Cart.items))
+    )
+    result = await session.execute(stmt)
+    cart = result.scalar_one()
+
+    await session.execute(delete(Item).where(Item.cart_id == cart.id))
+
+    cart.items_count = 0
+    cart.total_price = Decimal("0")
+
     await session.commit()
     await session.refresh(cart)
     return cart
