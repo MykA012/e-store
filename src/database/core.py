@@ -13,17 +13,3 @@ session_factory = async_sessionmaker(
     expire_on_commit=False,
     autoflush=False,
 )
-
-
-@asynccontextmanager
-async def init_db(app: FastAPI):
-    from src.database.models.base import Base
-    from src.user import models
-    from src.product import models
-    from src.category import models
-
-    async with engine.begin() as conn:
-        # await conn.run_sync(Base.metadata.drop_all)
-        await conn.run_sync(Base.metadata.create_all)
-
-    yield

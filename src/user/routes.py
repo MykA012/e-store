@@ -9,15 +9,15 @@ from src.user.schemas import (
     UserIDB,
 )
 
-router = APIRouter(prefix="/me", tags=["User"])
+router = APIRouter(tags=["User"])
 
 
-@router.get("")
+@router.get("/me")
 async def me(user=Depends(get_current_active_user)) -> UserIDB:
     return user
 
 
-@router.patch("/edit")
+@router.patch("/me/edit")
 async def edit(
     edit_user: UserEdit,
     user=Depends(get_current_active_user),
@@ -30,7 +30,7 @@ async def edit(
     )
 
 
-@router.patch("/change-password")
+@router.patch("/me/change-password")
 async def change_password(
     edit_pass: UserChangePassword,
     user=Depends(get_current_active_user),
@@ -41,7 +41,7 @@ async def change_password(
     )
 
 
-@router.delete("", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_current_user(
     user=Depends(get_current_active_user),
     session=Depends(session_dep),
