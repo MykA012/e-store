@@ -9,10 +9,10 @@ from src.user.schemas import (
     UserIDB,
 )
 
-router = APIRouter(prefix="/me", tags=["Users"])
+router = APIRouter(prefix="/me", tags=["User"])
 
 
-@router.get("/")
+@router.get("")
 async def me(user=Depends(get_current_active_user)) -> UserIDB:
     return user
 
@@ -41,7 +41,7 @@ async def change_password(
     )
 
 
-@router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_current_user(
     user=Depends(get_current_active_user),
     session=Depends(session_dep),

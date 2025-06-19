@@ -17,7 +17,7 @@ from src.user import user_repo
 router = APIRouter(tags=["Auth"])
 
 
-@router.post("/signup", status_code=status.HTTP_201_CREATED)
+@router.post("/signup")
 async def registration(
     user_in: UserCreate,
     session=Depends(session_dep),

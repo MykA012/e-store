@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, status
 
 from src.global_deps import session_dep
+from src.auth.deps import get_current_admin
 from src.category.deps import get_category_by_id
 from src.category import category_repo
 from src.category.schemas import (
@@ -14,7 +15,10 @@ router = APIRouter(prefix="/categories", tags=["Categories"])
 
 
 @router.get("/")
-async def get_all_categories(session=Depends(session_dep)) -> list[CategoryIDB]:
+async def get_all_categories(
+    session=Depends(session_dep),
+    admin=Depends(get_current_admin),
+) -> list[CategoryIDB]:
     categories = await category_repo.all_categories(session)
     return categories
 
@@ -23,6 +27,7 @@ async def get_all_categories(session=Depends(session_dep)) -> list[CategoryIDB]:
 async def create_category(
     category_in: CategoryCreate,
     session=Depends(session_dep),
+    admin=Depends(get_current_admin),
 ) -> CategoryIDB:
     category = await category_repo.add_category(
         session=session,
@@ -32,7 +37,10 @@ async def create_category(
 
 
 @router.get("/{category_id}")
-async def get_category(category=Depends(get_category_by_id)) -> CategoryIDB:
+async def get_category(
+    category=Depends(get_category_by_id),
+    admin=Depends(get_current_admin),
+) -> CategoryIDB:
     return category
 
 
@@ -41,6 +49,7 @@ async def patch_category(
     category_update: CategoryPatch,
     category=Depends(get_category_by_id),
     session=Depends(session_dep),
+    admin=Depends(get_current_admin),
 ) -> CategoryIDB:
     return await category_repo.update_category(
         session=session,
@@ -55,6 +64,7 @@ async def put_category(
     category_update: CategoryPut,
     category=Depends(get_category_by_id),
     session=Depends(session_dep),
+    admin=Depends(get_current_admin),
 ) -> CategoryIDB:
     return await category_repo.update_category(
         session=session,
@@ -68,6 +78,7 @@ async def put_category(
 async def delete_category(
     category=Depends(get_category_by_id),
     session=Depends(session_dep),
+    admin=Depends(get_current_admin),
 ) -> None:
     await category_repo.delete_category(
         session=session,
