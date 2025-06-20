@@ -75,7 +75,6 @@ async def add_product_to_cart(
     cart.items_count = sum(item.quantity for item in cart.items)
     cart.total_price = sum(item.quantity * item.product.price for item in cart.items)
     await session.commit()
-    await session.refresh(cart)
     return cart
 
 

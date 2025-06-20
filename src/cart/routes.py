@@ -27,13 +27,13 @@ async def add_product_in_cart(
     slug: str,
     user: User = Depends(get_current_active_user),
     session=Depends(session_dep),
-) -> dict:
-    await cart_repo.add_product_to_cart(
+) -> CartIDB:
+    cart = await cart_repo.add_product_to_cart(
         session=session,
         product_slug=slug,
         user=user,
     )
-    return {"status": "ok"}
+    return cart
 
 
 @router.delete("/product/{slug}")
