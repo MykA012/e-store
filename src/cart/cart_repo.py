@@ -36,28 +36,6 @@ async def get_user_cart(
     return cart
 
 
-async def clear_user_cart(
-    session: AsyncSession,
-    user: User,
-) -> Cart:
-    stmt = (
-        select(Cart)
-        .where(Cart.user_id == user.id)
-        .options(selectinload(Cart.items))
-    )
-    result = await session.execute(stmt)
-    cart = result.scalar_one()
-
-    await session.execute(delete(Item).where(Item.cart_id == cart.id))
-
-    cart.items_count = 0
-    cart.total_price = Decimal("0")
-
-    await session.commit()
-    await session.refresh(cart)
-    return cart
-
-
 async def add_product_to_cart(
     session: AsyncSession,
     user: User,
@@ -77,7 +55,7 @@ async def add_product_to_cart(
         .options(selectinload(Cart.items).selectinload(Item.product))
     )
     result = await session.execute(stmt)
-    cart = result.scalar_one_or_none()
+    cart = result.scalar_one()
 
     existing_item = next(
         (item for item in cart.items if item.product_id == product.id), None
@@ -98,4 +76,67 @@ async def add_product_to_cart(
     cart.total_price = sum(item.quantity * item.product.price for item in cart.items)
     await session.commit()
     await session.refresh(cart)
+    return cart
+
+
+async def clear_user_cart(
+    session: AsyncSession,
+    user: User,
+) -> Cart:
+    stmt = select(Cart).where(Cart.user_id == user.id).options(selectinload(Cart.items))
+    result = await session.execute(stmt)
+    cart = result.scalar_one()
+
+    await session.execute(delete(Item).where(Item.cart_id == cart.id))
+
+    cart.items_count = 0
+    cart.total_price = Decimal("0")
+
+    await session.commit()
+    await session.refresh(cart)
+    return cart
+
+
+async def remove_product(
+    session: AsyncSession,
+    user: User,
+    product_slug: str,
+) -> Cart:
+    product = await product_repo.get_product_by_slug(
+        session=session,
+        product_slug=product_slug,
+    )
+    if product is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found",
+        )
+
+    stmt = (
+        select(Cart)
+        .where(Cart.user_id == user.id)
+        .options(selectinload(Cart.items).selectinload(Item.product))
+    )
+    result = await session.execute(stmt)
+    cart = result.scalar_one()
+
+    existing_item = next(
+        (item for item in cart.items if item.product_id == product.id), None
+    )
+    if existing_item is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No such product in cart",
+        )
+
+    if existing_item.quantity == 1:
+        session.delete(existing_item)
+        cart.items.remove(existing_item)
+    else:
+        existing_item.quantity -= 1
+
+    cart.items_count = sum(item.quantity for item in cart.items)
+    cart.total_price = sum(item.quantity * item.product.price for item in cart.items)
+
+    await session.commit()
     return cart

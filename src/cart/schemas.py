@@ -10,8 +10,11 @@ class Item(BaseModel):
     product: ProductIDB
 
 
-class CartIDB(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+class CartBase(BaseModel):
     items_count: int
     total_price: Decimal
+
+
+class CartIDB(CartBase):
+    model_config = ConfigDict(from_attributes=True)
     items: list[Item]
