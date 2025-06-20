@@ -38,8 +38,10 @@ python -m src.main
 * **POST** public - `/login` - Вход по email и password
 
 ### Cart
-* **GET** protected - `/cart` -Корзина пользователя
-* **POST** protected - `/{product_slug}` - Добавить товар в корзину
+* **GET** protected - `/cart` - Корзина пользователя
+* **DELETE** protected - `/cart` - Отчистить корзину
+* **POST** protected - `/product/{product_slug}` - Добавить товар в корзину
+* **DELETE** protected - `/product/{product_slug}` - Удалить товар из корзины
 
 ### User
 * **GET** protected - `/me` - Информация о пользователе
@@ -73,6 +75,6 @@ python -m src.main
 * Все символы приводятся в нижнему регистру
 * Обрезаются пробелы по краям
 * Пробелы заменяются на тире
-> |      До               |         После          |
+> |         До            |         После          |
 > |-----------------------|------------------------|
 > |`Смартфоны и планшеты` | `smartfony-i-planshety`|
