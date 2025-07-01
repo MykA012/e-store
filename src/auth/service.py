@@ -11,7 +11,7 @@ from src.config import load_auth_jwt
 from src.user import user_repo
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login", auto_error=False)
 
 
 async def auth_user(

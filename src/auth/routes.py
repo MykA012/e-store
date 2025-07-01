@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import (
     APIRouter, Depends,
     HTTPException, status,
+    Response,
 )
 
 from src.auth.service import auth_user, create_access_token
@@ -31,6 +32,7 @@ async def registration(
 
 @router.post("/login")
 async def login(
+    response: Response,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     session: AsyncSession = Depends(session_dep),
 ) -> Token:
@@ -43,6 +45,25 @@ async def login(
         )
     access_token_expires = timedelta(minutes=1440)
     access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
+        data={"sub": user.username}, expires_delta=access_token_expires
     )
+    response.set_cookie(
+        key="access_token",
+        value=f"Bearer {access_token}",
+        httponly=True,
+        max_age=int(access_token_expires.total_seconds()),
+        secure=True,
+        samesite="lax",
+    )
+
     return Token(access_token=access_token, token_type="bearer")
+
+
+@router.post("/logout")
+async def logout(response: Response):
+    response.delete_cookie(
+        key="access_token",
+        path="/",
+        domain="localhost",
+    )
+    return {"status": 200, "message": "Successfully logged out"}
