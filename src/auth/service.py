@@ -15,9 +15,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 
 async def auth_user(
-    email: str, password: str, session: AsyncSession = Depends(session_dep)
+    username: str, password: str, session: AsyncSession = Depends(session_dep)
 ):
-    user = await user_repo.get_user_by_email(session, email)
+    user = await user_repo.get_user_by_username(session, username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):

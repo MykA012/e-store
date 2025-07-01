@@ -31,11 +31,11 @@ async def create_user(
     return user
 
 
-async def get_user_by_email(
+async def get_user_by_username(
     session: AsyncSession,
-    email: str,
+    username: str,
 ) -> User | None:
-    stmt = select(User).where(User.email == email)
+    stmt = select(User).where(User.username == username)
     result = await session.execute(stmt)
     return result.scalar_one_or_none()
 

@@ -2,7 +2,7 @@ from typing import Annotated
 
 import jwt
 from jwt.exceptions import InvalidTokenError
-from fastapi import Depends, HTTPException, status, Header
+from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.global_deps import session_dep
@@ -29,16 +29,16 @@ async def get_current_user(
             load_auth_jwt().public_key_path.read_text(),
             algorithms=[load_auth_jwt().ALGORITHM],
         )
-        email = payload.get("sub")
-        if email is None:
+        username = payload.get("sub")
+        if username is None:
             raise credentials_exception
-        token_data = TokenData(email=email)
+        token_data = TokenData(username=username)
     except InvalidTokenError:
         raise credentials_exception
 
-    user = await user_repo.get_user_by_email(
+    user = await user_repo.get_user_by_username(
         session,
-        email=token_data.email,
+        username=token_data.username,
     )
     if user is None:
         raise credentials_exception
