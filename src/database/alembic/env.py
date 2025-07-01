@@ -30,7 +30,7 @@ from src.cart import models
 
 target_metadata = Base.metadata
 
-config.set_main_option("sqlalchemy.url", load_settings().db_url)
+config.set_main_option("sqlalchemy.url", load_settings().db_url + "?async_fallback=True")
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
