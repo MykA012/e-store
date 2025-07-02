@@ -11,7 +11,7 @@ from src.catalog import catalog_repo
 router = APIRouter(tags=["Catalog"])
 
 
-@router.get("/product/{product_slug}")
+@router.get("/products/{product_slug}")
 async def get_product_by_slug(
     product_slug: str,
     session=Depends(session_dep),
@@ -25,14 +25,14 @@ async def get_product_by_slug(
     return product
 
 
-@router.get("/catalog/")
+@router.get("/categories/")
 async def get_categories(
     session=Depends(session_dep),
 ) -> list[CategoryIDB]:
     return await all_categories(session)
 
 
-@router.get("/category/{category_slug}")
+@router.get("/categories/{category_slug}")
 async def get_category_products(
     category_slug: str,
     session=Depends(session_dep),

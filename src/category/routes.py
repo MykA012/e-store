@@ -11,7 +11,7 @@ from src.category.schemas import (
     CategoryPut,
 )
 
-router = APIRouter(prefix="/categories", tags=["Categories"])
+router = APIRouter(prefix="/admin/categories", tags=["Admin"])
 
 
 @router.get("/")

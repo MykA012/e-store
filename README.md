@@ -36,6 +36,10 @@ python -m src.main
 ### Auth
 * **POST** public - `/signup` - Регистрация с username, email и password
 * **POST** public - `/login` - Вход по email и password
+* **POST** public - `/login` - Выход из аккаунт (отчистка токена из cookie)
+
+### Catalog
+* **GET** public - `/products/{product}` - 
 
 ### Cart
 * **GET** protected - `/cart` - Корзина пользователя

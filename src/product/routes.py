@@ -11,7 +11,7 @@ from src.product.schemas import (
     ProductPut,
 )
 
-router = APIRouter(prefix="/products", tags=["Products"])
+router = APIRouter(prefix="/admin/products", tags=["Admin"])
 
 
 @router.get("/")
