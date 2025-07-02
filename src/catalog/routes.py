@@ -47,29 +47,3 @@ async def get_category_products(
     if product is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return product
-
-
-# async def get_product_by_slug(
-#     session: AsyncSession,
-#     slug: str,
-# ) -> Product | None:
-#     stmt = select(Product).where(Product.slug == slug)
-#     result = await session.execute(stmt)
-#     return result.scalar_one_or_none()
-
-
-# @router.get("/categories/{category_slug}")
-
-
-# @router.get("/products/{product_slug}")
-# async def get_product_by_slug(
-#     product_slug: str,
-#     session=Depends(session_dep),
-# ) -> ProductIDB:
-#     product = await catalog_repo.get_product_by_slug(
-#         session=session,
-#         slug=product_slug,
-#     )
-#     if product is None:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-#     return product
