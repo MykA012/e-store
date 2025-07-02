@@ -1,5 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 
+from src.product.schemas import ProductIDB
+
 
 class CategoryBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -21,3 +23,8 @@ class CategoryPut(CategoryBase):
 class CategoryIDB(CategoryBase):
     id: int
     slug: str
+
+
+class CategoryWithProducts(CategoryIDB):
+    model_config = ConfigDict(from_attributes=True)
+    products: list[ProductIDB]

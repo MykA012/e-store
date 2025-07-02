@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from sqlalchemy import select
 
 from src.category.models import Category
@@ -31,6 +32,28 @@ async def get_category_by_id(
     session: AsyncSession, category_id: int
 ) -> Category | None:
     return await session.get(Category, category_id)
+
+
+async def get_category_by_slug(
+    session: AsyncSession,
+    slug: str,
+) -> Category | None:
+    stmt = select(Category).where(Category.slug == slug)
+    result = await session.execute(stmt)
+    return result.scalar_one_or_none()
+
+
+async def get_category_with_products(
+    session: AsyncSession,
+    slug: str,
+) -> Category | None:
+    stmt = (
+        select(Category)
+        .where(Category.slug == slug)
+        .options(selectinload(Category.products))
+    )
+    result = await session.execute(stmt)
+    return result.scalar_one_or_none()
 
 
 async def update_category(
