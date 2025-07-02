@@ -26,51 +26,6 @@ cd ..
 python -m src.main
 ```
 ---
-# Все URL
-#### Условные обозначения:
-Для удобства буду помечать url адреса уровнями защиты:
-* public - может зайти любой пользователь
-* protected - может зайти только авторизованый пользователь
-* private - может зайти только админ
-
-### Auth
-* **POST** public - `/signup` - Регистрация с username, email и password
-* **POST** public - `/login` - Вход по email и password
-* **POST** public - `/login` - Выход из аккаунт (отчистка токена из cookie)
-
-### Catalog
-* **GET** public - `/products/{product}` - 
-
-### Cart
-* **GET** protected - `/cart` - Корзина пользователя
-* **DELETE** protected - `/cart` - Отчистить корзину
-* **POST** protected - `/product/{product_slug}` - Добавить товар в корзину
-* **DELETE** protected - `/product/{product_slug}` - Удалить товар из корзины
-
-### User
-* **GET** protected - `/me` - Информация о пользователе
-* **DELETE** protected - `/me` - Удалить аккаунт пользователя (cascade)
-* **PATCH** protected - `/me/edit` - Редактировать информацию о пользователе
-* **PATCH** protected - `/me/change-password` - Сменить пароль пользователя
-
-### Products
-* **GET** private - `/products/` - Все товары
-* **POST** private - `/products/` - Добавить товар
-* **GET** private - `/products/{product_id}` - Найти товар по id
-* **PATCH** private - `/products/{product_id}` - Частично редактировать товар
-* **PATCH** private - `/products/{product_id}` - Перезаписать товар
-* **DELETE** private - `/products/{product_id}` - Удалить товар
-
-### Categories
-* **GET** private - `/categories/` - Все категории
-* **POST** private - `/categories/` - Добавить категорию
-* **GET** private - `/categories/{categories_id}` - Найти категорию по id
-* **PATCH** private - `/categories/{categories_id}` - Частично редактировать категорию
-* **PATCH** private - `/categories/{categories_id}` - Перезаписать категорию
-* **DELETE** private - `/categories/{categories_id}` - Удалить категорию (cascade)
-
-> Все пути прописаны относительно `http://localhost:8000`
----
 # FAQ
 
 ### Как формируется slug товара/категории?
@@ -79,6 +34,6 @@ python -m src.main
 * Все символы приводятся в нижнему регистру
 * Обрезаются пробелы по краям
 * Пробелы заменяются на тире
-> |         До            |         После          |
+> |           До          |          После         |
 > |-----------------------|------------------------|
 > |`Смартфоны и планшеты` | `smartfony-i-planshety`|

@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from src.product.models import Product
+from src.category.models import Category
 from src.product.schemas import (
     ProductCreate,
     ProductPatch,
@@ -39,6 +40,23 @@ async def get_product_by_slug(
     product_slug: str,
 ) -> Product | None:
     stmt = select(Product).where(Product.slug == product_slug)
+    result = await session.execute(stmt)
+    return result.scalar_one_or_none()
+
+
+async def get_product_in_category(
+    session: AsyncSession,
+    category_slug: str,
+    product_slug: str,
+) -> Product | None:
+    stmt = (
+        select(Product)
+        .join(Product.category)
+        .where(
+            Product.slug == product_slug,
+            Category.slug == category_slug,
+        )
+    )
     result = await session.execute(stmt)
     return result.scalar_one_or_none()
 
