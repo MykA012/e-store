@@ -22,7 +22,7 @@ async def my_cart(
     return cart
 
 
-@router.post("/product/{slug}")
+@router.post("/categories/{category_slug}/{product_slug}")
 async def add_product_in_cart(
     slug: str,
     user: User = Depends(get_current_active_user),
@@ -36,7 +36,7 @@ async def add_product_in_cart(
     return cart
 
 
-@router.delete("/product/{slug}")
+@router.delete("/categories/{category_slug}/{product_slug}")
 async def remove_product_from_cart(
     slug: str,
     user: User = Depends(get_current_active_user),
