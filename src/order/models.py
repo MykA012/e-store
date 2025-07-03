@@ -20,7 +20,7 @@ class Order(Base):
     delivery_address: Mapped[str]
     delivery_date: Mapped[datetime]
     is_delivered: Mapped[bool] = mapped_column(default=False)
-    created_at: Mapped[datetime] = mapped_column(default=func.now())
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped["User"] = relationship(back_populates="orders")

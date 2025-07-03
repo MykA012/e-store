@@ -21,7 +21,7 @@ class PaymentMethod(str, Enum):
 
 class Payment(Base):
     total_price: Mapped[Decimal]
-    created_at: Mapped[datetime] = mapped_column(func.now())
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     is_paid: Mapped[bool] = mapped_column(default=False)
     payment_method: Mapped[PaymentMethod] = mapped_column(SQLAlchemyEnum(PaymentMethod))
 
