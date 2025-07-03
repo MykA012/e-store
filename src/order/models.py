@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class Order(Base):
-    tracking_id: UUID = mapped_column(default=uuid4, index=True, unique=True)
+    tracking_id: Mapped[UUID] = mapped_column(default=uuid4, index=True, unique=True)
     total_price: Mapped[Decimal] = mapped_column(default=Decimal("0"))
     delivery_address: Mapped[str]
     delivery_date: Mapped[datetime]
@@ -27,11 +27,11 @@ class Order(Base):
 
     items: Mapped[list["Item"]] = relationship(
         back_populates="order",
-        cascade="all, delete orphan",
+        cascade="all, delete-orphan",
     )
 
     payment: Mapped["Payment"] = relationship(
         back_populates="order",
-        cascade="all, delete orphan",
+        cascade="all, delete-orphan",
         uselist=False,
     )

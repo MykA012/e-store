@@ -6,22 +6,10 @@ from fastapi import Depends, HTTPException, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.global_deps import session_dep
-from src.auth.models import TokenData
 from src.config import load_auth_jwt
 
-from src.auth.service import oauth2_scheme
 from src.user.models import User
 from src.user import user_repo
-
-
-async def get_token_from_cookie_or_header(
-    request: Request,
-) -> str | None:
-    token = request.cookies.get("access_token")
-    if token:
-        if token.startswith("Bearer "):
-            return token.split()[1]
-        return token
 
 
 async def get_current_user(
