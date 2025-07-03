@@ -1,6 +1,3 @@
-from contextlib import asynccontextmanager
-
-from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from src.config import load_settings

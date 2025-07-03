@@ -27,18 +27,18 @@ async def get_category(
 
 
 @router.get("/categories/{category_slug}/products")
-async def get_category(
+async def get_category_with_products(
     category_with_products=Depends(get_category_with_products),
 ) -> CategoryWithProducts:
     return category_with_products
 
 
 @router.get("/categories/{category_slug}/products/{product_slug}")
-async def get_category_products(
+async def get_category_product(
     category_slug: str,
     product_slug: str,
     session=Depends(session_dep),
-):
+) -> ProductIDB:
     product = await get_product_in_category(
         session=session,
         category_slug=category_slug,
