@@ -6,6 +6,7 @@ from src.database.models.base import Base
 
 if TYPE_CHECKING:
     from src.cart.models import Cart
+    from src.order.models import Order
 
 
 class User(Base):
@@ -18,4 +19,9 @@ class User(Base):
     cart: Mapped["Cart"] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
+        uselist=False,
+    )
+    orders: Mapped[list["Order"]] = relationship(
+        back_populates="user",
+        cascade="all, delete orphan",
     )

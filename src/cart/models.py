@@ -9,6 +9,7 @@ from src.database.models.base import Base
 if TYPE_CHECKING:
     from src.user.models import User
     from src.product.models import Product
+    from src.order.models import Order
 
 
 class Cart(Base):
@@ -32,3 +33,6 @@ class Item(Base):
 
     product_id: Mapped[int] = mapped_column(ForeignKey("products.id"))
     product: Mapped["Product"] = relationship(back_populates="item")
+
+    order_id: Mapped[int | None] = mapped_column(ForeignKey("orders.id"))
+    order: Mapped["Order | None"] = relationship(back_populates="items")
