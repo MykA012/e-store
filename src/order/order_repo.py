@@ -6,7 +6,7 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy import select
 
 from src.cart import cart_repo
-from src.order.models import Order
+from src.order.models import Order, PaymentMethod
 from src.user.models import User
 from src.cart.models import Item
 
@@ -31,7 +31,6 @@ async def get_users_order(
         .where((Order.tracking_id == tracking_id) & (Order.user_id == user.id))
         .options(
             selectinload(Order.items).joinedload(Item.product),
-            selectinload(Order.payment),
         )
     )
     result = await session.execute(stmt)
@@ -39,8 +38,9 @@ async def get_users_order(
     return order
 
 
-async def place_order(
+async def create_order(
     session: AsyncSession,
+    payment: PaymentMethod,
     delivery_address: str,
     user: User,
 ):
@@ -50,14 +50,22 @@ async def place_order(
     )
 
     order = Order(
-        user_id=user.id,
         tracking_id=uuid4(),
         total_price=cart.total_price,
+        payment_method=payment,
         delivery_address=delivery_address,
         delivery_date=datetime.now() + timedelta(days=7),
+        user_id=user.id,
         items=[item for item in cart.items],
     )
     session.add(order)
+    await session.flush()
+
+    await cart_repo.clear_user_cart(
+        session=session,
+        user=user
+    )
+
     await session.commit()
     await session.refresh(order)
     return order
