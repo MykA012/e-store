@@ -9,6 +9,8 @@ from src.cart.schemas import ItemIDB
 
 
 class OrderIDB(BaseModel):
+    model_config=ConfigDict(from_attributes=True)
+
     id: int
     tracking_id: UUID
     total_price: Decimal

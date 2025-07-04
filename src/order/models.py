@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 class PaymentMethod(str, Enum):
     CASH = "cash"
-    CREDITCARD = "creditcard"
+    CREDIT_CARD = "credit_card"
     SBP = "sbp"
 
 

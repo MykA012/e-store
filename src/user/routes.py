@@ -18,7 +18,7 @@ async def me(user: User = Depends(get_current_active_user)) -> UserIDB:
     return user
 
 
-@router.patch("/me/edit")
+@router.patch("/me")
 async def edit(
     edit_user: UserEdit,
     user: User = Depends(get_current_active_user),

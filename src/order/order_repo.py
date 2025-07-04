@@ -56,10 +56,14 @@ async def create_order(
         delivery_address=delivery_address,
         delivery_date=datetime.now() + timedelta(days=7),
         user_id=user.id,
-        items=[item for item in cart.items],
     )
     session.add(order)
     await session.flush()
+
+    for item in cart.items:
+        item.cart_id = None
+        item.order_id = order.id
+        order.items.append(item)
 
     await cart_repo.clear_user_cart(
         session=session,
