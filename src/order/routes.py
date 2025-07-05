@@ -61,7 +61,7 @@ async def place_an_order(
 
 
 @router.delete("/orderlist", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_order(
+async def cancel_order(
     order: UUID,
     user: User = Depends(get_current_active_user),
     session=Depends(session_dep),
