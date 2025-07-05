@@ -71,3 +71,7 @@ async def cancel_order(
         user=user,
         tracking_id=order,
     )
+    await order_repo.delete_order(
+        session=session,
+        order=order,
+    )
