@@ -1,3 +1,4 @@
+from decimal import Decimal
 from datetime import datetime, timedelta
 from uuid import UUID, uuid4
 
@@ -63,13 +64,23 @@ async def create_order(
     for item in cart.items:
         item.cart_id = None
         item.order_id = order.id
-        order.items.append(item)
 
-    await cart_repo.clear_user_cart(
-        session=session,
-        user=user
-    )
+    cart.total_price = Decimal("0")
+    cart.items_count = 0
 
     await session.commit()
     await session.refresh(order)
+
+    stmt = select(Order).where(Order.id == order.id).options(selectinload(Order.items))
+    result = await session.execute(stmt)
+    order = result.scalar_one()
+
     return order
+
+
+async def delete_order(
+    session: AsyncSession,
+    order: Order,
+) -> None:
+    await session.delete(order)
+    await session.commit()

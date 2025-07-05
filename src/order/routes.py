@@ -58,3 +58,16 @@ async def place_an_order(
         user=user,
     )
     return order
+
+
+@router.delete("/orderlist", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_order(
+    order: UUID,
+    user: User = Depends(get_current_active_user),
+    session=Depends(session_dep),
+):
+    order = await order_repo.get_users_order(
+        session=session,
+        user=user,
+        tracking_id=order,
+    )
